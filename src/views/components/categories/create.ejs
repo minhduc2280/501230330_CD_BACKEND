@@ -1,0 +1,47 @@
+<div class="content">
+  <div class="container-fluid">
+    <h4 class="page-title">Tao san pham moi</h4>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">Base Form Control</div>
+      </div>
+      <div class="card-body">
+        <form action="/categories/create" method="post">          
+          <div class="form-group">
+            <label for="code">Mã sản phẩm</label>
+            <input 
+              name="code"
+              type="text"
+              class="form-control"
+              id="code"
+              placeholder="nhập mã sản phẩm"
+            >
+          </div>
+          <div class="form-group">
+            <label for="name">tên sản phẩm</label>
+            <input 
+              name="name"
+              type="text"
+              class="form-control"
+              id="name"
+              placeholder="nhập tên sản phẩm"
+            >
+          </div>
+          <div class="form-group">
+            <label for="image">Link hình ảnh</label>
+            <input 
+              name="image"
+              type="text"
+              class="form-control"
+              id="image"
+              placeholder="Nhập link image"
+            >
+          </div>
+          <div class="card-action">
+            <button class="btn btn-success" type="submit">Tao</button>
+            <button class="btn btn-danger">Tro ve</button>
+          </div>
+        </form>
+      </div>
+  </div>
+</div>

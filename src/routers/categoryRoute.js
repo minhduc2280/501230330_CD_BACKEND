@@ -1,10 +1,9 @@
 import express from "express";
-import { listCategory } from "../controller/categoryController.js";
+import { listCategory, createCategory, renderPageCreateCategory } from "../controller/categoryController.js";
 const router = express.Router();
 
 router.get("/", listCategory)
-router.get("/create", function(req, res){
-  res.send("Create category")
-})
+router.get("/create", renderPageCreateCategory)//render ra from create
+router.post("/create", createCategory)
 
 export default router;

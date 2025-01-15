@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 
 export async function listCategory(req, res) {
   try {
-    const categories = await CategoryModel.find()
+    const categories = await CategoryModel.find({deletedAt: null})
     res.render("pages/categories/list", {
       title: "Categories",
       categories: categories
@@ -55,16 +55,55 @@ export async function updateCategory(req, res) {
 }
 
 export async function renderPageUpdateCategory(req, res) {
-  const { id } = req.params
-  const category = await CategoryModel.findOne({ _id: new ObjectId(id) })
-  if (category) {
-    res.render("pages/categories/form", {
-      title: "Create Categories",
-      mode: "Update",
-      category: category
-    })
+  try {
+    const { id } = req.params
+    const category = await CategoryModel.findOne({ _id: new ObjectId(id), deletedAt:null })
+    if (category) {
+      res.render("pages/categories/form", {
+        title: "Create Categories",
+        mode: "Update",
+        category: category
+      })
+    }
+    else{
+      res.send("hien khong co san pham nao phu hop!")
+    }
+  } catch (error) {
+    res.send("trang web nay khong ton tai!")
   }
-  else{
-    res.send("hien khong co san pham nao phu hop!")
+}
+
+export async function deleteCategory(req, res) {
+  const { id } = req.body
+  try {
+    await CategoryModel.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        deletedAt: new Date()
+      })
+    res.redirect("/categories")
+  } catch (error) {
+    console.log(error);
+    res.send("Xoa san pham khong thanh cong!")
+  }
+}
+
+export async function renderPageDeleteCategory(req, res) {
+  try {
+    const { id } = req.params
+    const category = await CategoryModel.findOne({ _id: new ObjectId(id), deletedAt:null })
+    if (category) {
+      res.render("pages/categories/form", {
+        title: "Delete Categories",
+        mode: "Delete",
+        category: category
+      })
+    }
+    else{
+      res.send("hien khong co san pham nao phu hop!")
+    }
+  } catch (error) {
+    console.log(error);
+    res.send("trang web nay khong ton tai")
   }
 }

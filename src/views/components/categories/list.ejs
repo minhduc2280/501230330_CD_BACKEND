@@ -25,7 +25,10 @@
                 </td>
                 <td><%=category.code%></td>
                 <td><%=category.name%></td>
-                <td><a class="btn btn-primary btn-sm" href="/categories/update/<%=category._id%>">Sua</a></td>
+                <td>
+                  <a class="btn btn-primary btn-sm" href="/categories/update/<%=category._id%>">Sua</a>
+                  <a class="btn btn-danger btn-sm" href="/categories/delete/<%=category._id%>">Xoa</a>
+                </td>
               </tr>
               <% }); %>
           </tbody>

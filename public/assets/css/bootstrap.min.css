@@ -9955,4 +9955,8 @@ a.text-dark:hover {
 .mb-2{
   margin-bottom: 2rem;
 }
+
+.hide{
+  display: none;
+}
 /*# sourceMappingURL=bootstrap.min.css.map */

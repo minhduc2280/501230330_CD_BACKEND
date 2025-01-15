@@ -1,27 +1,47 @@
 <div class="content">
   <div class="container-fluid">
-    <h4 class="page-title">Tao san pham moi</h4>
+    <h4 class="page-title">
+      <% if (mode === "Create"){ %>
+        Tao san pham moi
+      <% }; %>
+      <% if (mode === "Update"){ %>
+        Cap nhap san pham
+      <% }; %>
+    </h4>
     <div class="card">
-      <div class="card-header">
-        <div class="card-title">Base Form Control</div>
-      </div>
       <div class="card-body">
-        <form action="/categories/create" method="post">          
+        <% if (mode === "Create"){ %>
+          <form action="/categories/create" method="post"> 
+        <% }; %>
+        <% if (mode === "Update"){ %>
+          <form action="/categories/update" method="post"> 
+            <div class="form-group hide">
+              <label for="code">Mã sản phẩm</label>
+              <input 
+                name="id"
+                type="text"
+                value="<%=category?._id%>"
+                id="id"
+              />
+            </div>
+        <% }; %>
           <div class="form-group">
             <label for="code">Mã sản phẩm</label>
             <input 
               name="code"
               type="text"
+              value="<%=category?.code%>"
               class="form-control"
               id="code"
               placeholder="nhập mã sản phẩm"
-            >
+            />
           </div>
           <div class="form-group">
             <label for="name">tên sản phẩm</label>
             <input 
               name="name"
               type="text"
+              value="<%=category?.name%>"
               class="form-control"
               id="name"
               placeholder="nhập tên sản phẩm"
@@ -32,13 +52,20 @@
             <input 
               name="image"
               type="text"
+              value="<%=category?.image%>"
               class="form-control"
               id="image"
               placeholder="Nhập link image"
             >
           </div>
           <div class="card-action">
-            <button class="btn btn-success" type="submit">Tao</button>
+            <% if (mode === "Create"){ %>
+              <button class="btn btn-success" type="submit">Tao</button>
+            <% }; %>
+            <% if (mode === "Update"){ %>
+              <button class="btn btn-success" type="submit">Cap nhap</button>
+            <% }; %>
+            
             <button class="btn btn-danger">Tro ve</button>
           </div>
         </form>

@@ -4,6 +4,7 @@
       <h4 class="page-title">Danh sách sản phẩm</h4>
       <a href="/categories/create" class="btn btn-default">Tạo sản phẩm</a>
     </div>
+    <% if (categories && categories.length>0) { %>
     <div class="card">
       <div class="card-body">
         <table class="table table-head-bg-success">
@@ -35,5 +36,8 @@
         </table>
       </div>
     </div>
+    <% }else{%>
+      <h5>hiện không có sản phẩm</h5>
+  <% } %>
   </div>
 </div>

@@ -102,3 +102,9 @@
 .category-label{
 	width: 4rem;
 }
+.items-center{
+	align-items: center;
+}
+.while-space{
+	white-space: nowrap;
+}

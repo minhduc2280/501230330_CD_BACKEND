@@ -2,7 +2,10 @@ import CategoryModel from "../models/categoryModel.js"
 import { ObjectId } from "mongodb";
 import { removeVietnameseAccents } from "../common/index.js";
 export async function listCategory(req, res) {
-  const search = req.query?.search;
+  const search = req.query?.search
+  const pageSize = !!req.query.pageSize ? parseInt(req.query.pageSize):5
+  const page = !!req.query.page ? parseInt(req.query.page):1
+  const skip = (page-1) * pageSize
   let filters = {
     deletedAt: null,
   };
@@ -10,10 +13,15 @@ export async function listCategory(req, res) {
     filters.searchString = { $regex: removeVietnameseAccents(search), $options:"i"};
   }
   try {
-    const categories = await CategoryModel.find(filters)
+    const countCategories = await CategoryModel.countDocuments(filters)
+    const categories = await CategoryModel.find(filters).skip(skip).limit(pageSize)
+    // res.json(categories)
     res.render("pages/categories/list", {
       title: "Categories",
-      categories: categories
+      categories: categories,
+      countPagination: Math.ceil(countCategories/pageSize),
+      pageSize,
+      page,
     })
   } catch (error) {
     console.log(error);
@@ -112,3 +120,4 @@ export async function renderPageDeleteCategory(req, res) {
     res.send("trang web nay khong ton tai")
   }
 }
+

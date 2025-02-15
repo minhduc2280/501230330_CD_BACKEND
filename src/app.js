@@ -1,7 +1,7 @@
 import express from 'express';
 import path from "path"
-import router from './routers/index.js';
-import mongoConnect from "./mongo/mongoConnecter.js"
+  import router from './routers/index.js';
+  import mongoConnect from "./mongo/mongoConnecter.js"
 import bodyParser from 'body-parser';
 
 const app = express();

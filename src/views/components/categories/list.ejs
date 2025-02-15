@@ -1,8 +1,23 @@
 <div class="content">
   <div class="container-fluid">
-    <div class="flex items-center justify-content-between mb-2">
+    <div class="flex items-center justify-content-between">
       <h4 class="page-title">Danh sách sản phẩm</h4>
       <a href="/categories/create" class="btn btn-default">Tạo sản phẩm</a>
+    </div>
+    <div class="flex justify-content-end  mb-5">
+      <div class="form-group flex full-width items-center">
+        <label for="defaultSelect" class="white-space">Sắp Xếp</label>
+        <select class="form-control form-control max-w-10 mb-4px" id="defaultSelect" onchange="changeSort(event)">
+          <% sortObject.forEach(function(sortObject, index){ %>
+            <%if(sortObject.code === sort){%>
+              <option value="<%=sortObject.code%>" selected><%=sortObject.name%></option>
+            <%}%>
+            <%if(sortObject.code !== sort){%>
+              <option value="<%=sortObject.code%>" ><%=sortObject.name%></option>
+            <%}%>
+          <%})%>
+        </select>
+      </div>
     </div>
     <% if (categories && categories.length>0) { %>
       <div class="card">
@@ -21,10 +36,13 @@
               <% categories.forEach(function(category, index){ %>
                 <tr>
                   <td>
-                    <%=index%>
+                    <%=index + 1%>
                   </td>
                   <td>
-                    <img src="<%=category.image%>" alt="image" class="category-label">
+                    <img 
+                    src="/static/assets/img/<%=category.image%>" 
+                    alt="image" 
+                    class="category-label">
                   </td>
                   <td>
                     <%=category.code%>

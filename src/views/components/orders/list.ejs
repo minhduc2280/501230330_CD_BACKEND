@@ -1,8 +1,8 @@
 <div class="content">
   <div class="container-fluid">
     <div class="flex items-center justify-content-between">
-      <h4 class="page-title">Danh sách sản phẩm</h4>
-      <a href="/categories/create" class="btn btn-default">Tạo sản phẩm</a>
+      <h4 class="page-title">Danh sách Hóa Đơn</h4>
+      <a href="/products/create" class="btn btn-default">Tạo Hóa Đơn</a>
     </div>
     <div class="flex justify-content-end  mb-5">
       <div class="form-group flex full-width items-center">
@@ -19,41 +19,39 @@
         </select>
       </div>
     </div>
-    <% if (categories && categories.length>0) { %>
+    <% if (orders && orders.length>0) { %>
       <div class="card">
         <div class="card-body">
           <table class="table table-head-bg-success">
             <thead>
               <tr>
-                <th scope="col">STT</th>
-                <th scope="col">image</th>
-                <th scope="col">code</th>
-                <th scope="col">name</th>
+                <th scope="col">Mã hóa đơn</th>
+                <!-- code, name, active -->
+                <th scope="col">Sản phẩm</th>
+                <th scope="col">Giảm giá</th>
+                <th scope="col">Trạng thái</th>
+                <th scope="col">Tổng hóa đơn</th>
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody>
-              <% categories.forEach(function(category, index){ %>
+            <tbody id="listProduct">
+              <% orders.forEach(function(order, index){ %>
                 <tr>
+                  <td><%=order.orderNo%></td>
                   <td>
-                    <%=index + 1%>
+                    <div class="form-group gap-2>">
+                      <% order.orderItems.forEach(function(orderItem, index){ %>
+                        <p><%=orderItem.quantity%>-<%=orderItem.productCode%></p>
+                      </label>
+                      <%})%>
+                  </div>
                   </td>
+                  <td><%=order.discount%>%</td>
+                  <td><%=order.status%></td>
+                  <td><%=order.total%>VND</td>
                   <td>
-                    <img 
-                    src="<%=category.image%>" 
-                    src="/static/assets/img/<%=category.image%>" 
-                    alt="image" 
-                    class="category-label">
-                  </td>
-                  <td>
-                    <%=category.code%>
-                  </td>
-                  <td>
-                    <%=category.name%>
-                  </td>
-                  <td>
-                    <a class="btn btn-primary btn-sm" href="/categories/update/<%=category._id%>">Sua</a>
-                    <a class="btn btn-danger btn-sm" href="/categories/delete/<%=category._id%>">Xoa</a>
+                    <a class="btn btn-primary btn-sm" href="/products/update/<%=order._id%>">Hoàn Thành</a>
+                    <a class="btn btn-danger btn-sm" href="/products/delete/<%=order._id%>">Hủy đơn</a>
                   </td>
                 </tr>
                 <% }); %>

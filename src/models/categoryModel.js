@@ -27,8 +27,14 @@ const categorySchema = new Schema({
 
 },{
   versionKey:false,
-  collection:"categories"
+  collection:"categories",
+  toJSON: {virtuals: true},
+  toObject: {virtuals: true}
 })
-categorySchema.indexes()
+
+categorySchema.virtual("id").get(function(){
+  return this._id.toString()
+})
+
 const CategoryModel = mongoose.model("Category", categorySchema)
-export default CategoryModel
+export default CategoryModel  

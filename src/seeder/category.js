@@ -1,8 +1,8 @@
 import CategoryModel from "../models/categoryModel.js"
-const date = [
+const data = [
   {
-    code: "AN_001",
-    name: "Ao nu",
+    code: "A_001",
+    name: "Ao",
     image: "cat-1.jpg",
     searchString: "ao nu",
     createdAt: new Date(),
@@ -14,9 +14,9 @@ const date = [
     searchString: "may anh",
     createdAt: new Date(),
   },
-  {
-    code: "GA_001",
-    name: "Giay nam",
+  {     
+    code: "G_001",
+    name: "Giay ",
     image: "cat-3.jpg",
     searchString: "giay nam",
     createdAt: new Date(),

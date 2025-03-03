@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="flex items-center justify-content-between">
       <h4 class="page-title">Danh sách sản phẩm</h4>
-      <a href="/categories/create" class="btn btn-default">Tạo sản phẩm</a>
+      <a href="/products/create" class="btn btn-default">Tạo sản phẩm</a>
     </div>
     <div class="flex justify-content-end  mb-5">
       <div class="form-group flex full-width items-center">
@@ -19,41 +19,56 @@
         </select>
       </div>
     </div>
-    <% if (categories && categories.length>0) { %>
+    <% if (products && products.length>0) { %>
       <div class="card">
         <div class="card-body">
           <table class="table table-head-bg-success">
             <thead>
               <tr>
                 <th scope="col">STT</th>
-                <th scope="col">image</th>
-                <th scope="col">code</th>
-                <th scope="col">name</th>
+                <th scope="col">Info</th>
+                <!-- code, name, active -->
+                <th scope="col">Price</th>
+                <th scope="col">Color</th>
+                <th scope="col">Category</th>
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody>
-              <% categories.forEach(function(category, index){ %>
+            <tbody id="listProduct">
+              <% products.forEach(function(product, index){ %>
                 <tr>
                   <td>
                     <%=index + 1%>
                   </td>
                   <td>
-                    <img 
-                    src="<%=category.image%>" 
-                    src="/static/assets/img/<%=category.image%>" 
-                    alt="image" 
-                    class="category-label">
+                    <div class="flex">
+                      <div>
+                        <img 
+                        src="/static/assets/img/<%=product.images[0]%>" 
+                        alt="image" 
+                        class="category-label">
+                      </div>
+                      <div>
+                        <p><%=product.code%></p>
+                        <p><%=product.name%></p>
+                        <p><%=product.active%></p>
+                      </div>
+                    </div>
                   </td>
+                  <td><%=product.price%></td>
                   <td>
-                    <%=category.code%>
+                    <div class="form-group flex gap-2%>">
+                      <label for="">Color: </label>
+                      <% product.colors.forEach(function(color, index){ %>
+                          <span class="product-checkbox-label mr-1 bg-<%=color%>"></span>
+                        </label>
+                      <%})%>
+                  </div>
                   </td>
+                  <td><%=product.category?.name%></td>
                   <td>
-                    <%=category.name%>
-                  </td>
-                  <td>
-                    <a class="btn btn-primary btn-sm" href="/categories/update/<%=category._id%>">Sua</a>
-                    <a class="btn btn-danger btn-sm" href="/categories/delete/<%=category._id%>">Xoa</a>
+                    <a class="btn btn-primary btn-sm" href="/products/update/<%=product._id%>">Sua</a>
+                    <a class="btn btn-danger btn-sm" href="/products/delete/<%=product._id%>">Xoa</a>
                   </td>
                 </tr>
                 <% }); %>

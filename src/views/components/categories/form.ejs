@@ -18,7 +18,7 @@
         <% }; %>
         <% if (mode === "Update"){ %>
           <form action="/categories/update/<%=category?._id%>" method="post"> 
-            <!-- <div class="form-group hide">
+            <div class="form-group hide">
               <label for="code">Mã sản phẩm</label>
               <input 
                 name="id"
@@ -26,7 +26,7 @@
                 value="<%=category?._id%>"
                 id="id"
               />
-            </div> -->
+            </div>
         <% }; %>
         <% if (mode === "Delete"){ %>
           <form action="/categories/Delete" method="post"> 

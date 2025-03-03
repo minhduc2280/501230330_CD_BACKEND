@@ -1,0 +1,85 @@
+<script>
+  function addNewOrderItem() {
+    $("#listProduct").append(`
+    <div class="flex gap-2 orderItemGroup" >
+                  <div class="btn btn-success itemButton" onclick="addNewOrderItem()"><i class="la la-plus"></i></div>
+                    <select class="form-control form-control max-w-10 mb-4px itemSelect" name="itemSelect">
+                      <option value="">chọn sản phẩm</option>
+                      <% products.forEach(function(product, index){ %>
+                          <option value="<%=product._id%>" data-colors="<%=product.colors%>" data-sizes="<%=product.sizes%>" data-price="<%=product.price%>"><%= product.name %></option>
+                      <% }) %>
+                    </select>
+                    <input 
+                      name="quantity"
+                      type="number"
+                      value="<%=order?.quantity%>"
+                      class="form-control categoryInput "
+                      id="quantity"
+                      placeholder="nhập số lượng "
+                      <% if (mode === 'Delete'){%>
+                        disabled
+                      <%}%>
+                    />
+                    <input 
+                      name="itemPrice"
+                      type="number"
+                      value="<%=order?.discount%>"
+                      class="form-control categoryInput itemPrice"
+                      <% if (mode === 'Delete'){%>
+                        disabled
+                      <%}%>
+                      disabled
+                    />
+                    <select class="form-control form-control max-w-10 mb-4px itemColor" name="itemColor">
+                      
+                    </select>
+                    <select class="form-control form-control max-w-10 mb-4px itemSize" name="itemSize">
+                      
+                    </select>
+                    <div class="btn btn-danger itemButton deleteOrderItem"><i class="la la-trash"></i></div>
+                </div>
+    `)
+    removeOrderItem()
+    addSelectData()
+  }
+
+  function removeOrderItem(){
+    $(".deleteOrderItem").click(function () {
+      $(this).parent().remove()
+    })
+  }
+  removeOrderItem()
+
+  function addSelectData(){
+    $(".itemSelect").change(function(){
+      const selectedProduct = $(this).find("option:selected");
+      const sizesData = selectedProduct.data("sizes");
+      const colorsData = selectedProduct.data("colors");
+      const price = selectedProduct.data("price");
+
+      const sizes = sizesData.split(",");
+      const colors = colorsData.split(",");
+
+      const orderItemGroup = $(this).closest(".orderItemGroup");
+
+      const sizeSelect = orderItemGroup.find(".itemSize");
+      const colorSelect = orderItemGroup.find(".itemColor");
+      const priceInput = orderItemGroup.find(".itemPrice");
+
+      sizeSelect.append(`<option value="">chọn size</option>`)
+      if(sizesData.length > 0 && sizes.length > 0 ){
+        sizes.forEach((size) => {
+          sizeSelect.append(`<option value="${size}">${size}</option>`)
+        });
+      }
+      colorSelect.append(`<option value="">chọn màu</option>`)
+      if(colorsData.length > 0 && colors.length > 0 ) {
+        colors.forEach((color) => {
+          colorSelect.append(`<option value="${color}">${color}</option>`);
+        });
+      }
+      priceInput.val(price)
+    })
+  }
+  addSelectData()
+</script>

@@ -147,3 +147,14 @@
 .gap-2{
 	gap: 2rem;
 }
+
+input{
+	height:38px
+}
+.itemButton{
+	height: 38px;
+	width: 38px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

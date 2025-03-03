@@ -11,19 +11,17 @@
 </head>
 <body>
 	<div class="wrapper">
-			<!--//main-header-->
 			<%- include('../../layouts/mainheader'); %>
-					<!--//slidebar-->
-					<%- include('../../layouts/slidebar'); %>
-			<div class="main-panel">
-				<%- include('../../components/products/form'); %>
-				<!--//slidebar-->
-				<%- include('../../layouts/footer'); %>
-			</div>
+			<%- include('../../layouts/slidebar'); %>
+				<div class="main-panel">
+					<%- include('../../components/orders/form'); %>
+					<%- include('../../layouts/footer'); %>
+				</div>
 		</div>
 	</div>
 </body>
 <!--//script-->
 <%- include('../../layouts/script/main'); %>
+<%- include('../../layouts/script/orderForm'); %>
 
 </html>

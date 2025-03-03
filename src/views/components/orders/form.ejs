@@ -2,180 +2,148 @@
   <div class="container-fluid">
     <h4 class="page-title">
       <% if (mode === "Create"){ %>
-        Tạo sản phẩm mới
-      <% }; %>
-      <% if (mode === "Update"){ %>
-        Cập nhập sản phẩm
-      <% }; %>
-      <% if (mode === "Delete"){ %>
-        Ban co dong y xoa san pham <%=product?.name%>
+        Giả lập tạo sản hóa đơn
       <% }; %>
     </h4>
     <div class="card">
       <div class="card-body">
-        <% if (mode === "Create"){ %>
           <form action="/products/create" method="post"> 
-        <% }; %>
-        <% if (mode === "Update"){ %>
-          <form action="/products/update/<%=product?._id%>" method="post"> 
-            <div class="form-group hide">
-              <label for="code">Mã sản phẩm</label>
-              <input 
-                name="id"
-                type="text"
-                value="<%=product?._id%>"
-                id="id"
-              />
-            </div>
-        <% }; %>
-        <% if (mode === "Delete"){ %>
-          <form action="/products/Delete" method="post"> 
-            <div class="form-group hide">
-              <input 
-                name="id"
-                type="text"
-                value="<%=product?._id%>"
-                id="id"
-              />
-            </div>
-        <% }; %>
-          <div class="form-group <%=err?.code && 'has-error has-feedback'%> ">
-            <label for="code">Mã sản phẩm</label>
+          <div class="form-group <%=err?.discount && 'has-error has-feedback'%> ">
+            <label for="discount">Mức giảm giá</label>
             <input 
-              name="code"
-              type="text"
-              value="<%=product?.code%>"
+              name="discount"
+              type="number"
+              value="<%=order?.discount%>"
               class="form-control categoryInput"
-              id="code"
+              id="discount"
               placeholder="nhập mã sản phẩm "
               <% if (mode === 'Delete'){%>
                 disabled
               <%}%>
               />
-              <small class="form-text text-muted text-danger"><%=err?.code%></small>
+              <small class="form-text text-muted text-danger"><%=err?.discount%></small>
             </div>
-            <div class="form-group <%=err.name && 'has-error has-feedback'%>">
-              <label for="name">Tên sản phẩm</label>
-              <input 
-              name="name"
+          <div class="form-group ">
+            <label for="code">Danh sách sản phẩm</label>
+              <div id="listProduct">
+                <div class="flex gap-2 orderItemGroup" >
+                  <div class="btn btn-success itemButton" onclick="addNewOrderItem()"><i class="la la-plus"></i></div>
+                    <select class="form-control form-control max-w-10 mb-4px itemSelect" name="itemSelect">
+                      <option value="">chọn sản phẩm</option>
+                      <% products.forEach(function(product, index){ %>
+                          <option value="<%=product._id%>" data-colors="<%=product.colors%>" data-sizes="<%=product.sizes%>" data-price="<%=product.price%>"><%= product.name %></option>
+                      <% }) %>
+                    </select>
+                    <input 
+                      name="quantity"
+                      type="number"
+                      value="<%=order?.quantity%>"
+                      class="form-control categoryInput "
+                      id="quantity"
+                      placeholder="nhập số lượng "
+                      <% if (mode === 'Delete'){%>
+                        disabled
+                      <%}%>
+                    />
+                    <input 
+                      name="itemPrice"
+                      type="number"
+                      value="<%=order?.discount%>"
+                      class="form-control categoryInput itemPrice"
+                      <% if (mode === 'Delete'){%>
+                        disabled
+                      <%}%>
+                      disabled
+                    />
+                    <select class="form-control form-control max-w-10 mb-4px itemColor" name="itemColor">
+                      
+                    </select>
+                    <select class="form-control form-control max-w-10 mb-4px itemSize" name="itemSize">
+                      
+                    </select>
+                    <div class="btn btn-danger itemButton deleteOrderItem"><i class="la la-trash"></i></div>
+                </div>
+              </div>
+          </div>
+          <p>Địa chỉ giao hàng</p>
+          <div class="form-group ">
+            <label for="billingName">Tên khách hàng</label>
+            <input 
+              name="billingName"
               type="text"
-              value="<%=product?.name%>"
               class="form-control categoryInput"
-              id="name"
-              placeholder="nhập tên sản phẩm"
-              <% if (mode === 'Delete'){%>
-                disabled
-              <%}%>
-              />
-              <small class="form-text text-muted text-danger"><%=err?.name%></small>
-            </div>
-            <div class="form-group <%=err.searchString && 'has-error has-feedback'%>">
-              <label for="search">Chuỗi tìm kiếm</label>
-              <input 
-              name="searchString"
-              type="text"
-              value="<%=product?.searchString%>"
-              class="form-control categoryInput"
-              id="searchString"
-              placeholder="nhập tên chuỗi"
-              <% if (mode === 'Delete'){%>
-                disabled
-              <%}%>
-              />
-              <small class="form-text text-muted text-danger"><%=err?.searchString%></small>
-            </div>
-            <div class="form-group <%=err.price && 'has-error has-feedback'%>">
-              <label for="price">Giá</label>
-              <input 
-              name="price"
-              type="number"
-              value="<%=product?.price%>"
-              class="form-control categoryInput"
-              id="price"
-              placeholder="nhập tên giá"
-              <% if (mode === 'Delete'){%>
-                disabled
-              <%}%>
-              />
-              <small class="form-text text-muted text-danger"><%=err?.price%></small>
-            </div>
-            <div class="form-group <%=err.images && 'has-error has-feedback'%>">
-              <label for="image">Link hình ảnh</label>
-              <input 
-              name="image"
-              type="text"
-              value="<%=typeof product?.images === 'object' ? product?.images[0]: '' %>"
-              class="form-control categoryInput"
-              id="image"
-              placeholder="Nhập link image"
+              id="billingName"
+              placeholder="Nhập tên khách hàng "
               <% if (mode === 'Delete'){%>
                 disabled
               <%}%>
             />
-            <small class="form-text text-muted text-danger"><%=err?.images%></small>
           </div>
-            <div class="form-group flex gap-2 <%=err.image && 'has-error has-feedback'%>">
-              <label for="">Size: </label>
-              <% sizes.forEach(function(size, index){ %>
-                <label class="form-check-label">
-                  <%if((product.sizes || []).includes(size)){%>
-                    <input class="form-check-input" type="checkbox" name="sizes" value="<%=size%>" checked>
-                  <%}else{%>
-                    <input class="form-check-input" type="checkbox" name="sizes" value="<%=size%>">
-                  <%}%>
-                  <span class="form-check-sign"><%=size%></span>
-                </label>
-              <%})%>
-            <small class="form-text text-muted text-danger"><%=err?.size%></small>
+          <div class="form-group ">
+            <label for="billingEmail">Email</label>
+            <input 
+              name="billingEmail"
+              type="email"
+              class="form-control categoryInput"
+              id="billingEmail"
+              placeholder="Nhập email "
+              <% if (mode === 'Delete'){%>
+                disabled
+              <%}%>
+            />
           </div>
-          <div class="form-group flex gap-2 <%=err.size && 'has-error has-feedback'%>">
-            <label for="">Color: </label>
-            <% colors.forEach(function(color, index){ %>
-              <label class="form-check-label flex flex-col">
-                <%if((product.colors || []).includes(color)){%>
-                  <input class="form-check-input" type="checkbox" name="colors" value="<%=color%>" checked>
-                <%}else{%>
-                  <input class="form-check-input" type="checkbox" name="colors" value="<%=color%>">
-                <%}%>
-                <span class="form-check-sign mr-1">
-                </span>
-                <span class="product-checkbox-label bg-<%=color%>"></span>
-              </label>
-            <%})%>
-          <small class="form-text text-muted text-danger"><%=err?.colors%></small>
-        </div>
-
-        <div class="form-group <%=err.active && 'has-error has-feedback'%>">
-          <label for="image">Active</label>
-          <%if(product?.active === 'true'){%>
-            <input type="checkbox" checked data-toggle="toggle" data-onstyle="default" name="active">
-          <%} else {%>
-            <input type="checkbox"  data-toggle="toggle" data-onstyle="default" name="active">
-          <%}%>
-      </div>
-
-      <div class="form-group <%=err.active && 'has-error has-feedback'%>">
-        <label for="description">Description</label>
-        <textarea class="form-control" id="comment" name="description" rows="5" active><%=product.description%></textarea>
-      </div>
-      <div class="form-group <%=err.active && 'has-error has-feedback'%>">
-        <label for="image">Information</label>
-        <textarea class="form-control" id="comment" name="information" rows="5" ><%=product.information%></textarea>
-      </div>
-      <div class="form-group <%=err.active && 'has-error has-feedback'%>">
-        
-          <label for="image">Category</label>
-          <select class="form-control form-control max-w-10 mb-4px" id="defaultSelect" name="categoryId">
-            <% categories.forEach(function(category, index){ %>
-              <%if(category.id === product?.categoryIdString){%>  
-                <option value="<%=category._id%>" selected><%= category.name %></option>
-              <% } else {%>
-                <option value="<%=category._id%>"><%= category.name %></option>
-              <% } %>
-            <% }) %>
-          </select>
-        
-      </div>
+          <div class="form-group ">
+            <label for="billingPhoneNumber">SĐT</label>
+            <input 
+              name="billingPhoneNumber"
+              type="number"
+              class="form-control categoryInput"
+              id="billingPhoneNumber"
+              placeholder="Nhập số điện thoại "
+              <% if (mode === 'Delete'){%>
+                disabled
+              <%}%>
+            />
+          </div>
+          <div class="form-group ">
+            <label for="billingAddress">Địa chỉ</label>
+            <input 
+              name="billingAddress"
+              type="text"
+              class="form-control categoryInput"
+              id="billingAddress"
+              placeholder="Nhập địa chỉ nhà "
+              <% if (mode === 'Delete'){%>
+                disabled
+              <%}%>
+            />
+          </div>
+          <div class="form-group ">
+            <label for="billingDistrict">Quận/Huyện</label>
+            <input 
+              name="billingDistrict"
+              type="text"
+              class="form-control categoryInput"
+              id="billingDistrict"
+              placeholder="Nhập quận/huyện "
+              <% if (mode === 'Delete'){%>
+                disabled
+              <%}%>
+            />
+          </div>
+          <div class="form-group ">
+            <label for="billingCity">Thành phố</label>
+            <input 
+              name="billingCity"
+              type="text"
+              class="form-control categoryInput"
+              id="billingCity"
+              placeholder="Nhập thành phố "
+              <% if (mode === 'Delete'){%>
+                disabled
+              <%}%>
+            />
+          </div>
 
           <div class="card-action">
             <% if (mode === "Create"){ %>

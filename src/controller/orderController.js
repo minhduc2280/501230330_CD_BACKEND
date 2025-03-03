@@ -1,4 +1,6 @@
 import OrderModel from "../models/orderModel.js"
+import ProductModel from "../models/productModel.js"
+
 import { ObjectId } from "mongodb";
 
 
@@ -8,6 +10,9 @@ const sortObject = [
   { code: "code_ASC", name: "mã tăng dần" },
   { code: "code_DESC", name: "mã giảm dần" }
 ]
+
+const sizes = ["S","M","L","XL"]
+const colors = ["red","green","yellow","white","black"]
 
 export async function listOrder(req, res) {
   const search = req.query?.search
@@ -53,7 +58,7 @@ export async function listOrder(req, res) {
 }
 
 export async function createOrder(req, res) {
-  const { discount, status, orderItems } = req.body
+  const { discount, orderItems, billingAddress } = req.body
   let subTotal = 0, total = 0, numericalOrder = 1;
 
   const lastOrder = await OrderModel.findOne().sort({ createdAt: -1 });
@@ -76,9 +81,10 @@ export async function createOrder(req, res) {
       orderNo: orderNo,
       discount: discount,
       total: total,
-      status: status,
+      status: "created",
       orderItems: orderItems,
       numericalOrder: numericalOrder,
+      billingAddress: billingAddress,
       createdAt: new Date()
     })
     res.send(rs)
@@ -90,14 +96,16 @@ export async function createOrder(req, res) {
 
 
 
-// export async function renderPageCreateCategory(req, res) {
-//   res.render("pages/categories/form", {
-//     title: "Create Categories",
-//     mode: "Create",
-//     category: {},
-//     err: {}
-//   })
-// }
+export async function renderPageSimulateCreateOrder(req, res) {
+  const products = await ProductModel.find({deletedAt: null}, "code name price sizes colors")
+  res.render("pages/orders/form", {
+    title: "Create Orders",
+    mode: "Create",
+    order: {},
+    products:products,
+    err: {}
+  })
+}
 
 // export async function updateCategory(req, res) {
 //   const { ...data } = req.body

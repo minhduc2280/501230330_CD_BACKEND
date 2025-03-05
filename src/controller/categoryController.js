@@ -2,7 +2,7 @@ import CategoryModel from "../models/categoryModel.js"
 import { ObjectId } from "mongodb";
 import { removeVietnameseAccents } from "../common/index.js";
 
-const sortObject = [
+const sortObjectUIs = [
   { code: "name_ASC", name: "tên tăng dần" },
   { code: "name_DESC", name: "tên giảm dần" },
   { code: "code_ASC", name: "mã tăng dần" },
@@ -14,15 +14,16 @@ export async function listCategory(req, res) {
   const pageSize = !!req.query.pageSize ? parseInt(req.query.pageSize) : 5
   const page = !!req.query.page ? parseInt(req.query.page) : 1
   const skip = (page - 1) * pageSize
-  let sort = !!req.query.sort ? req.query.sort : "null"
+  let sort = !!req.query.sort ? req.query.sort : null, sortObj= {}
   let filters = {
     deletedAt: null,
   };
 
-  let sortQuery = { createdAt: -1 };
-  if (sort) {
+  if (!sort) {
+    sortObj = { createdAt: -1 };
+  }else{
     const sortArray = sort.split('_');
-    sortQuery = { [sortArray[0]]: sortArray[1] === "ASC" ? 1 : -1 };
+    sortObj = { [sortArray[0]]: sortArray[1] === "ASC" ? 1 : -1 };
   }
 
   if (search && search.length > 0) {
@@ -31,7 +32,7 @@ export async function listCategory(req, res) {
 
   try {
     const countCategories = await CategoryModel.countDocuments(filters)
-    const categories = await CategoryModel.find(filters).skip(skip).limit(pageSize).sort(sortQuery)
+    const categories = await CategoryModel.find(filters).skip(skip).limit(pageSize).sort(sortObj)
 
 
     res.render("pages/categories/list", {
@@ -41,7 +42,7 @@ export async function listCategory(req, res) {
       pageSize,
       page,
       sort,
-      sortObject
+      sortObjectUIs
     })
   } catch (error) {
     console.log(error);

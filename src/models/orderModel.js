@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 const {Schema} = mongoose;
 
 const orderItemSchema = new Schema({
-  productCode: String,
   productId: Schema.Types.ObjectId,
   quantity: Number,
   price: Number,
@@ -56,6 +55,27 @@ const orderSchema = new Schema({
   collection:"orders",
   toJSON: {virtuals: true},
   toObject: {virtuals: true}
+})
+
+orderItemSchema.virtual("product", {
+  ref: "Product" , 
+  localField: "productId",
+  foreignField: "_id",
+  justOne: true
+})
+
+orderItemSchema.virtual("priceFormatString").get(function(){  
+  return this.price.toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND"
+  })
+})
+
+orderItemSchema.virtual("totalFormatString").get(function(){  
+  return this.total.toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND"
+  })
 })
 
 const OrderModel = mongoose.model("Order", orderSchema)

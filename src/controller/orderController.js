@@ -1,10 +1,11 @@
 import OrderModel from "../models/orderModel.js"
 import ProductModel from "../models/productModel.js"
+import {prepareOrderItems} from "../utils/order.js"
 
 import { ObjectId } from "mongodb";
 
 
-const sortObject = [
+const sortObjectUIs = [
   { code: "name_ASC", name: "tên tăng dần" },
   { code: "name_DESC", name: "tên giảm dần" },
   { code: "code_ASC", name: "mã tăng dần" },
@@ -19,7 +20,7 @@ export async function listOrder(req, res) {
   const pageSize = !!req.query.pageSize ? parseInt(req.query.pageSize) : 5
   const page = !!req.query.page ? parseInt(req.query.page) : 1
   const skip = (page - 1) * pageSize
-  let sort = !!req.query.sort ? req.query.sort : "null"
+  let sort = !!req.query.sort ? req.query.sort : null, sortObj= {}
   let filters = {
     deletedAt: null,
   };
@@ -28,10 +29,11 @@ export async function listOrder(req, res) {
     filters.orderNo = search
   }
 
-  let sortQuery = { createdAt: -1 };
-  if (sort) {
+  if (!sort) {
+    sortObj = { createdAt: -1 };
+  }else{
     const sortArray = sort.split('_');
-    sortQuery = { [sortArray[0]]: sortArray[1] === "ASC" ? 1 : -1 };
+    sortObj = { [sortArray[0]]: sortArray[1] === "ASC" ? 1 : -1 };
   }
 
   if (search && search.length > 0) {
@@ -40,8 +42,9 @@ export async function listOrder(req, res) {
 
   try {
     const countOrders = await OrderModel.countDocuments(filters)
-    const orders = await OrderModel.find(filters).skip(skip).limit(pageSize).sort(sortQuery)
+    const orders = await OrderModel.find(filters).populate("orderItems.product", "name code").skip(skip).limit(pageSize).sort(sortObj).lean({ virtuals: true })
 
+    // res.send(orders)
     res.render("pages/orders/list", {
       title: "Orders",
       orders: orders,
@@ -49,7 +52,7 @@ export async function listOrder(req, res) {
       pageSize,
       page,
       sort,
-      sortObject
+      sortObjectUIs
     })
   } catch (error) {
     console.log(error);
@@ -94,7 +97,61 @@ export async function createOrder(req, res) {
   }
 }
 
+export async function simulatorCreateOrder(req, res) {
+  const { discount, itemSelect, quantity, itemColor,itemSize, itemPrice, billingName, billingEmail, 
+    billingPhoneNumber, billingAddress: address, billingDistrict, billingCity} = req.body
+  let subTotal = 0, total = 0, numericalOrder = 1;
 
+  const lastOrder = await OrderModel.findOne().sort({ createdAt: -1 });
+  
+  if(lastOrder && !isNaN(lastOrder.numericalOrder)){
+    numericalOrder = lastOrder.numericalOrder + 1
+  }
+  
+  const orderNo = "order - " + numericalOrder
+
+
+  const billingAddress = {
+    name: billingName,
+    email: billingEmail,
+    phoneNumber: billingPhoneNumber,
+    address: address,
+    district: billingDistrict,
+    city: billingCity,
+  }
+
+  const orderItems = prepareOrderItems({
+    itemSelect: itemSelect, 
+    quantity: quantity, 
+    itemPrice: itemPrice, 
+    itemColor: itemColor, 
+    itemSize: itemSize
+  })
+
+  if(orderItems.length > 0){
+    for(let orderItem of orderItems){
+      subTotal += (orderItem.quantity * orderItem.price)
+    }
+  }
+  total = subTotal * (100 - discount) / 100
+
+  try {
+    const rs = await OrderModel.create({
+      orderNo: orderNo,
+      discount: parseFloat(discount),
+      total: total,
+      status: "created",
+      orderItems: orderItems,
+      numericalOrder: numericalOrder,
+      billingAddress: billingAddress,
+      createdAt: new Date()
+    })
+    res.redirect("/orders")
+  } catch (error) {
+    console.log("err", error);
+    
+  }
+}
 
 export async function renderPageSimulateCreateOrder(req, res) {
   const products = await ProductModel.find({deletedAt: null}, "code name price sizes colors")
@@ -107,6 +164,34 @@ export async function renderPageSimulateCreateOrder(req, res) {
   })
 }
 
+export async function updateStatusDeliveringOrder(req, res) {
+  const { orderId } = req.body
+  const currentOrder = await OrderModel.findOne({ _id: new ObjectId(orderId) }
+  )
+  try {
+    // console.log(rs);
+    if(currentOrder){
+      const rs = await OrderModel.updateOne(
+        { _id: new ObjectId(orderId) },
+        {
+          status: "delivering",
+          updateAt: new Date()
+        })
+        res.send({success: true})
+    }else{
+      res.send({
+        success: false,
+        message:"Không tồn tại order này"
+      })
+    }
+  } catch (error) {
+    console.log("err", error);
+    res.send({
+      success: false,
+      message:"Thay đổi trạng thái không thành công: " + currentOrder.orderNo
+    })
+  }
+}
 // export async function updateCategory(req, res) {
 //   const { ...data } = req.body
 //   const {id} = req.params

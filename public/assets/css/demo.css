@@ -144,6 +144,19 @@
 	background-color: #000000;
 }
 
+.cancelled{
+	color: #ff0000;
+}
+.completed{
+	color: #00ff88;
+}
+.delivering{
+	color: #d9ff00;
+}
+.created{
+	color: #000000;
+}
+
 .gap-2{
 	gap: 2rem;
 }

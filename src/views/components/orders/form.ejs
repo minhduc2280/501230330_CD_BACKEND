@@ -7,7 +7,7 @@
     </h4>
     <div class="card">
       <div class="card-body">
-          <form action="/products/create" method="post"> 
+          <form action="/orders/simulatorCreate" method="post"> 
           <div class="form-group <%=err?.discount && 'has-error has-feedback'%> ">
             <label for="discount">Mức giảm giá</label>
             <input 
@@ -53,7 +53,6 @@
                       <% if (mode === 'Delete'){%>
                         disabled
                       <%}%>
-                      disabled
                     />
                     <select class="form-control form-control max-w-10 mb-4px itemColor" name="itemColor">
                       
@@ -146,17 +145,8 @@
           </div>
 
           <div class="card-action">
-            <% if (mode === "Create"){ %>
-              <button class="btn btn-success" type="submit">Tao</button>
-            <% }; %>
-            <% if (mode === "Update"){ %>
-              <button class="btn btn-success" type="submit">Sua</button>
-            <% }; %>
-            <% if (mode === "Delete"){ %>
-              <button class="btn btn-danger" type="submit">Xoa</button>
-            <% }; %>
-            
-            <a href="/products" class="btn btn-primary">Trở về</a>
+              <button class="btn btn-success" type="submit">Tạo</button>
+            <a href="/orders" class="btn btn-primary">Trở về</a>
           </div>
         </form>
       </div>

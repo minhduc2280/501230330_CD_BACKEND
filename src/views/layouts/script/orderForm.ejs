@@ -16,19 +16,12 @@
                       class="form-control categoryInput "
                       id="quantity"
                       placeholder="nhập số lượng "
-                      <% if (mode === 'Delete'){%>
-                        disabled
-                      <%}%>
                     />
                     <input 
                       name="itemPrice"
                       type="number"
                       value="<%=order?.discount%>"
                       class="form-control categoryInput itemPrice"
-                      <% if (mode === 'Delete'){%>
-                        disabled
-                      <%}%>
-                      disabled
                     />
                     <select class="form-control form-control max-w-10 mb-4px itemColor" name="itemColor">
                       
@@ -66,12 +59,15 @@
       const colorSelect = orderItemGroup.find(".itemColor");
       const priceInput = orderItemGroup.find(".itemPrice");
 
+      sizeSelect.empty()
       sizeSelect.append(`<option value="">chọn size</option>`)
       if(sizesData.length > 0 && sizes.length > 0 ){
         sizes.forEach((size) => {
           sizeSelect.append(`<option value="${size}">${size}</option>`)
         });
       }
+
+      colorSelect.empty()
       colorSelect.append(`<option value="">chọn màu</option>`)
       if(colorsData.length > 0 && colors.length > 0 ) {
         colors.forEach((color) => {

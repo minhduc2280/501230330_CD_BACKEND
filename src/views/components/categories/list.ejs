@@ -8,7 +8,7 @@
       <div class="form-group flex full-width items-center">
         <label for="defaultSelect" class="white-space">Sắp Xếp</label>
         <select class="form-control form-control max-w-10 mb-4px" id="defaultSelect" onchange="changeSort(event)">
-          <% sortObject.forEach(function(sortObject, index){ %>
+          <% sortObjectUIs.forEach(function(sortObject, index){ %>
             <%if(sortObject.code === sort){%>
               <option value="<%=sortObject.code%>" selected><%=sortObject.name%></option>
             <%}%>

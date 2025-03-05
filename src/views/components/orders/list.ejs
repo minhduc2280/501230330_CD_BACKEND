@@ -8,7 +8,7 @@
       <div class="form-group flex full-width items-center">
         <label for="defaultSelect" class="white-space">Sắp Xếp</label>
         <select class="form-control form-control max-w-10 mb-4px" id="defaultSelect" onchange="changeSort(event)">
-          <% sortObject.forEach(function(sortObject, index){ %>
+          <% sortObjectUIs.forEach(function(sortObject, index){ %>
             <%if(sortObject.code === sort){%>
               <option value="<%=sortObject.code%>" selected><%=sortObject.name%></option>
             <%}%>
@@ -28,6 +28,7 @@
                 <th scope="col">Mã hóa đơn</th>
                 <!-- code, name, active -->
                 <th scope="col">Sản phẩm</th>
+                <th scope="col">Giá</th>
                 <th scope="col">Giảm giá</th>
                 <th scope="col">Trạng thái</th>
                 <th scope="col">Tổng hóa đơn</th>
@@ -41,17 +42,33 @@
                   <td>
                     <div class="form-group gap-2>">
                       <% order.orderItems.forEach(function(orderItem, index){ %>
-                        <p><%=orderItem.quantity%>-<%=orderItem.productCode%></p>
+                        <p><%=orderItem.quantity%>x<%=orderItem?.product?.name%></p>
+                      </label>
+                      <%})%>
+                  </div>
+                  </td>
+                  <td>
+                    <div class="form-group gap-2>">
+                      <% order.orderItems.forEach(function(orderItem, index){ %>
+                        <p><%=orderItem.price%></p>
                       </label>
                       <%})%>
                   </div>
                   </td>
                   <td><%=order.discount%>%</td>
-                  <td><%=order.status%></td>
+                  <td class="<%=order.status%>">
+                    <%=order.status%>
+                  </td>
                   <td><%=order.total%>VND</td>
                   <td>
-                    <a class="btn btn-primary btn-sm" href="/products/update/<%=order._id%>">Hoàn Thành</a>
-                    <a class="btn btn-danger btn-sm" href="/products/delete/<%=order._id%>">Hủy đơn</a>
+                    <%if(order.status !== "cancelled" || order.status !== "completed"){%>
+                      <%if(order.status !== "delivering"){%>
+                      <button class="btn btn-info btn-sm" onclick="changeStatus('<%=order._id%>')">Giao Hàng</button>
+                      <%}%>
+                      <a class="btn btn-primary btn-sm" href="/orders/update/<%=order._id%>">Hoàn Thành</a>
+                      <a class="btn btn-danger btn-sm" href="/orders/delete/<%=order._id%>">Hủy đơn</a>
+                      <%}%>
+                    
                   </td>
                 </tr>
                 <% }); %>
